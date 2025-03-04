@@ -12,8 +12,16 @@ export async function POST(
 
     const body = await req.json();
 
-    const { name, price, categoryId, priceId, images, isFeatured, isArchived } =
-      body;
+    const {
+      name,
+      description,
+      price,
+      categoryId,
+      priceId,
+      images,
+      isFeatured,
+      isArchived,
+    } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
@@ -57,6 +65,7 @@ export async function POST(
     const product = await prismadb.product.create({
       data: {
         name,
+        description,
         price,
         isFeatured,
         isArchived,

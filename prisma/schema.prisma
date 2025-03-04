@@ -40,6 +40,7 @@ model Category {
   billboardId String // Foreign Key to Billboard
   billboard   Billboard @relation(fields: [billboardId], references: [id])
   name        String
+  description String?
   products    Product[] @relation("CategoryToProduct")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -49,20 +50,21 @@ model Category {
 }
 
 model Product {
-  id         String      @id @default(uuid())
-  storeId    String // Foreign Key to Store
-  store      Store       @relation("StoreToProduct", fields: [storeId], references: [id])
-  categoryId String // Foreign Key to Category
-  category   Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name       String
-  price      Decimal
-  isFeatured Boolean     @default(false)
-  isArchived Boolean     @default(false)
-  priceId    String
-  images     Image[] // Relation to Image model
-  orderItems OrderItem[] // Relation to Order model
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id          String      @id @default(uuid())
+  storeId     String // Foreign Key to Store
+  store       Store       @relation("StoreToProduct", fields: [storeId], references: [id])
+  categoryId  String // Foreign Key to Category
+  category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  name        String
+  description String?
+  price       Decimal
+  isFeatured  Boolean     @default(false)
+  isArchived  Boolean     @default(false)
+  priceId     String
+  images      Image[] // Relation to Image model
+  orderItems  OrderItem[] // Relation to Order model
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   @@index([storeId])
   @@index([categoryId])
@@ -86,9 +88,9 @@ model Order {
 model OrderItem {
   id        String  @id @default(uuid())
   orderId   String // Foreign Key to Order
-  order     Order   @relation(fields: [orderId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productId String // Foreign Key to Product
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onUpdate: Cascade)
   quantity  Int     @default(1)
 
   @@index([orderId])
