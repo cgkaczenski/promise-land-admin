@@ -9,15 +9,17 @@ datasource db {
 }
 
 model Store {
-  id         String      @id @default(uuid())
-  name       String
-  userId     String
-  billboards Billboard[] @relation("StoreToBillboard")
-  categories Category[]  @relation("StoreToCategory")
-  products   Product[]   @relation("StoreToProduct")
-  orders     Order[]     @relation("StoreToOrder")
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id          String      @id @default(uuid())
+  name        String
+  billboardId String?
+  description String?
+  userId      String
+  billboards  Billboard[] @relation("StoreToBillboard")
+  categories  Category[]  @relation("StoreToCategory")
+  products    Product[]   @relation("StoreToProduct")
+  orders      Order[]     @relation("StoreToOrder")
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
 model Billboard {
