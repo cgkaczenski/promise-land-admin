@@ -18,7 +18,7 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
-  const { productIds, quantities } = await req.json();
+  const { productIds, quantities, phone } = await req.json();
 
   if (!productIds || productIds.length === 0) {
     return new NextResponse("Product ids are required", { status: 400 });
@@ -53,6 +53,7 @@ export async function POST(
     data: {
       storeId: params.storeId,
       isPaid: false,
+      ...(phone ? { phone } : {}),
       orderItems: {
         create: productIds.map((productId: string, index: number) => ({
           product: {
@@ -74,6 +75,7 @@ export async function POST(
     payment_method_types: ["card", "us_bank_account"],
     metadata: {
       orderId: order.id,
+      ...(phone ? { phone } : {}), // Also add phone to Stripe metadata if provided
     },
     payment_method_options: {
       us_bank_account: {
