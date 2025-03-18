@@ -12,7 +12,7 @@ model Store {
   id          String      @id @default(uuid())
   name        String
   billboardId String?
-  description String?
+  description String?     @db.Text
   userId      String
   billboards  Billboard[] @relation("StoreToBillboard")
   categories  Category[]  @relation("StoreToCategory")
@@ -43,7 +43,7 @@ model Category {
   billboardId String // Foreign Key to Billboard
   billboard   Billboard @relation(fields: [billboardId], references: [id])
   name        String
-  description String?
+  description String?   @db.Text
   products    Product[] @relation("CategoryToProduct")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -60,7 +60,7 @@ model Product {
   categoryId  String // Foreign Key to Category
   category    Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name        String
-  description String?
+  description String?     @db.Text
   price       Decimal
   isFeatured  Boolean     @default(false)
   isArchived  Boolean     @default(false)
