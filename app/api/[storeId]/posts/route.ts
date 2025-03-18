@@ -106,7 +106,7 @@ export async function GET(
         category: true,
       },
       orderBy: {
-        createdAt: "desc",
+        date: "asc",
       },
     });
 

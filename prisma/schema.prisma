@@ -81,7 +81,7 @@ model Post {
   categoryId  String // Foreign Key to Category
   category    Category  @relation("CategoryToPost", fields: [categoryId], references: [id])
   name        String
-  description String?
+  description String?   @db.Text
   isFeatured  Boolean   @default(false)
   isArchived  Boolean   @default(false)
   images      Image[]   @relation("PostToImage") // Relation to Image model
