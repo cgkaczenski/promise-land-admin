@@ -81,6 +81,7 @@ export async function PATCH(
       name,
       description,
       price,
+      priceId,
       categoryId,
       images,
       isFeatured,
@@ -107,6 +108,10 @@ export async function PATCH(
       return new NextResponse("Price is required", { status: 400 });
     }
 
+    if (!priceId) {
+      return new NextResponse("PriceId is required", { status: 400 });
+    }
+
     if (!categoryId) {
       return new NextResponse("Category id is required", { status: 400 });
     }
@@ -130,6 +135,7 @@ export async function PATCH(
         name,
         description,
         price,
+        priceId,
         categoryId,
         images: {
           deleteMany: {},
