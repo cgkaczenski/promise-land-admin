@@ -1,8 +1,13 @@
-import { NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs';
+import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs";
 
-import prismadb from '@/lib/prismadb';
- 
+import prismadb from "@/lib/prismadb";
+import { getCorsHeaders, handleCors } from "@/lib/cors";
+
+export async function OPTIONS(req: Request) {
+  return handleCors(req);
+}
+
 export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
@@ -34,7 +39,7 @@ export async function POST(
       where: {
         id: params.storeId,
         userId,
-      }
+      },
     });
 
     if (!storeByUserId) {
@@ -46,15 +51,15 @@ export async function POST(
         label,
         imageUrl,
         storeId: params.storeId,
-      }
+      },
     });
-  
+
     return NextResponse.json(billboard);
   } catch (error) {
-    console.log('[BILLBOARDS_POST]', error);
+    console.log("[BILLBOARDS_POST]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
-};
+}
 
 export async function GET(
   req: Request,
@@ -67,13 +72,14 @@ export async function GET(
 
     const billboards = await prismadb.billboard.findMany({
       where: {
-        storeId: params.storeId
-      }
+        storeId: params.storeId,
+      },
     });
-  
-    return NextResponse.json(billboards);
+
+    const corsHeaders = getCorsHeaders(req.headers.get("origin") || undefined);
+    return NextResponse.json(billboards, { headers: corsHeaders });
   } catch (error) {
-    console.log('[BILLBOARDS_GET]', error);
+    console.log("[BILLBOARDS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
-};
+}

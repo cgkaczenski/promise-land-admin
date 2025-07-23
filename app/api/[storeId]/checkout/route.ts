@@ -3,15 +3,10 @@ import { NextResponse } from "next/server";
 
 import { stripe } from "@/lib/stripe";
 import prismadb from "@/lib/prismadb";
+import { getCorsHeaders, handleCors } from "@/lib/cors";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
-
-export async function OPTIONS() {
-  return NextResponse.json({}, { headers: corsHeaders });
+export async function OPTIONS(req: Request) {
+  return handleCors(req);
 }
 
 export async function POST(
@@ -85,6 +80,8 @@ export async function POST(
       },
     },
   });
+
+  const corsHeaders = getCorsHeaders(req.headers.get("origin") || undefined);
 
   return NextResponse.json(
     { url: session.url },

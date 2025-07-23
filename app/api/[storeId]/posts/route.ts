@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
+import { getCorsHeaders, handleCors } from "@/lib/cors";
+
+export async function OPTIONS(req: Request) {
+  return handleCors(req);
+}
 
 export async function POST(
   req: Request,
@@ -110,7 +115,8 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(posts);
+    const corsHeaders = getCorsHeaders(req.headers.get("origin") || undefined);
+    return NextResponse.json(posts, { headers: corsHeaders });
   } catch (error) {
     console.log("[POSTS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });
