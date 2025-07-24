@@ -65,8 +65,8 @@ export async function POST(
   const session = await stripe.checkout.sessions.create({
     line_items,
     mode: "subscription",
-    success_url: `${process.env.FRONTEND_STORE_URL}/cart?success=1`,
-    cancel_url: `${process.env.FRONTEND_STORE_URL}/cart?canceled=1`,
+    success_url: `${process.env.FRONTEND_STORE_URL}`,
+    cancel_url: `${process.env.FRONTEND_STORE_URL}/cart`,
     payment_method_types: ["card", "us_bank_account"],
     metadata: {
       orderId: order.id,
